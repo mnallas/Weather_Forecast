@@ -12,17 +12,33 @@
     <title>Weather Now</title>
   </head>
   <body>
-    <header></header>
-    <div id="container">
-      <section id="searchSec"></section>
-      <article id="mainDisplay"></article>
-      <aside id="forecast"></aside>
+    <header>Weather App</header>
+    <div class="container">
+      <div class="row">
+        <section id="searchSec">
+          <form>
+            <input type="text" id="userInput" />
+            <input type="submit" id="submitBtn" value="Search" />
+          </form>
+          <div class="card" style="width: 18rem;">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Oakley</li>
+              <li class="list-group-item">San Francisco</li>
+              <li class="list-group-item">Los Angeles</li>
+            </ul>
+          </div>
+        </section>
+        <article id="mainDisplay"></article>
+      </div>
+
+      <aside id="forecast" class="row"></aside>
     </div>
     <script
       src="https://code.jquery.com/jquery-3.5.0.min.js"
       integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
       crossorigin="anonymous"
     ></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.1/locale/af.min.js"></script> -->
     <script src="./app.js"></script>
   </body>
 </html>
