@@ -1,11 +1,13 @@
 $(document).ready(function () {
   var apiKey = "a5eba74b4f1ac7f8bc5b0e9bfa0ae606";
   var userInput = "";
+  // var inputArray = [];
   //   var current = moment().format("MMMM Do YYYY, h:mm:ss a");
   //   $("body").append(`<h1>${current}</h1>`);
-  $(document).on("click", function (e) {
+  $(document).on("click", "#submitBtn", function (e) {
     e.preventDefault();
     userInput = $("#userInput").val();
+    // inputArray = userInput.split(",");
     $("#userInput").val("");
     $.ajax({
       type: "GET",
@@ -27,13 +29,16 @@ $(document).ready(function () {
       $("#info").remove();
       $("#mainDisplay").prepend(`<div id="info">
         <p>${response.list[num].dt_txt}</p>
+        <img src="http://openweathermap.org/img/wn/${
+          response.list[num].weather[0].icon
+        }@2x.png" alt="WeatherIcon">
         <p>${response.city.name}</p>
         <p>Sunrise: ${unixConverter(response.city.sunrise)}</p>
         <p>Sunset: ${unixConverter(response.city.sunset)}</p>
         <p>${response.list[num].main.temp}°F</p>
         <p>${response.list[num].main.temp_min}°F</p>
         <p>${response.list[num].main.temp_max}°F</p>
-        <p>Humidity: ${response.list[num].main.humidity}</p>
+        <p>Humidity: ${response.list[num].main.humidity}%</p>
         <p>Weather: ${response.list[num].weather[0].description}</p>
         <label for="customRange2">Time(on every 3 hours): </label>
         <input
@@ -47,16 +52,26 @@ $(document).ready(function () {
     });
   }
 
+  // when adding icon(      //  <img src="http://openweathermap.org/img/wn/${
+  //    response.list[8 * i].weather[8 * i].icon
+  //  }.png" alt="WeatherIcon">) not working
   function displayForecast() {
-    for (let i = 0; i < 5; i++) {
-      $("#forecast").prepend(`    <div class="card" style="width: 14rem;">
+    $("#forecast").empty();
+    $.ajax({
+      type: "GET",
+      url: `https://api.openweathermap.org/data/2.5/forecast?units=imperial&q=${userInput}&appid=${apiKey}`,
+      dataType: "json",
+    }).then(function (response) {
+      for (let i = 0; i < 5; i++) {
+        $("#forecast").append(`    <div class="card" style="width: 14rem;">
     <div class="card-body">
-      <h5 class="card-title">Special title treatment</h5>
-      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-      <p class="btn btn-primary">Look</p>
+       <h5 class="card-title">${response.list[8 * i].dt_txt}</h5>
+      <p class="card-text">Temp: ${response.list[8 * i].main.temp}°F</p>
+      <p class="card-text">Humidity: ${response.list[8 * i].main.humidity}%</p>
     </div>
   </div>`);
-    }
+      }
+    });
   }
 
   function unixConverter(timestamp) {
