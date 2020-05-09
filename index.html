@@ -15,20 +15,16 @@
     <header>Weather App</header>
     <div class="container">
       <div class="row">
-        <section id="searchSec">
-          <form>
+        <section class="mr-5" id="searchSec">
+          <form class="mb-5">
             <input type="text" id="userInput" placeholder="San Francisco,CA" />
             <input type="submit" id="submitBtn" value="Search" />
           </form>
           <div class="card" style="width: 18rem;">
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">Oakley</li>
-              <li class="list-group-item">San Francisco</li>
-              <li class="list-group-item">Los Angeles</li>
-            </ul>
+            <ul id="list" class="list-group list-group-flush"></ul>
           </div>
         </section>
-        <article id="mainDisplay"></article>
+        <article class="mb-5" id="mainDisplay"></article>
       </div>
 
       <aside id="forecast" class="row"></aside>

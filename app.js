@@ -1,13 +1,20 @@
 $(document).ready(function () {
   var apiKey = "a5eba74b4f1ac7f8bc5b0e9bfa0ae606";
   var userInput = "";
+  var searchNum = 0;
+  var arrSearch = JSON.parse(localStorage.getItem(`search`)) || [];
+  console.log(arrSearch);
+  var searchList = [];
   // var inputArray = [];
   //   var current = moment().format("MMMM Do YYYY, h:mm:ss a");
   //   $("body").append(`<h1>${current}</h1>`);
   $(document).on("click", "#submitBtn", function (e) {
     e.preventDefault();
     userInput = $("#userInput").val();
-    // inputArray = userInput.split(",");
+    arrSearch.push(userInput);
+    renderSearch(arrSearch);
+
+    localStorage.setItem("search", JSON.stringify(arrSearch));
     $("#userInput").val("");
     $.ajax({
       type: "GET",
@@ -19,6 +26,17 @@ $(document).ready(function () {
       displayForecast();
     });
   });
+
+  $(document).on("slide", function (event, ui) {
+    console.log(ui.value);
+  });
+
+  function renderSearch(arr) {
+    $("#list").empty();
+    for (let i = 0; i < arr.length; i++) {
+      $("#list").prepend(`<li class="list-group-item">${arr[i]}</li>`);
+    }
+  }
 
   function displayInfo(num) {
     $.ajax({
@@ -36,8 +54,6 @@ $(document).ready(function () {
         <p>Sunrise: ${unixConverter(response.city.sunrise)}</p>
         <p>Sunset: ${unixConverter(response.city.sunset)}</p>
         <p>${response.list[num].main.temp}°F</p>
-        <p>${response.list[num].main.temp_min}°F</p>
-        <p>${response.list[num].main.temp_max}°F</p>
         <p>Humidity: ${response.list[num].main.humidity}%</p>
         <p>Weather: ${response.list[num].weather[0].description}</p>
         <label for="customRange2">Time(on every 3 hours): </label>
@@ -45,16 +61,13 @@ $(document).ready(function () {
           type="range"
           class="custom-range"
           min="0"
-          max="8"
-          id="customRange2"
+          max="7"
+          id="customRange"
         />
       </div>`);
     });
   }
 
-  // when adding icon(      //  <img src="http://openweathermap.org/img/wn/${
-  //    response.list[8 * i].weather[8 * i].icon
-  //  }.png" alt="WeatherIcon">) not working
   function displayForecast() {
     $("#forecast").empty();
     $.ajax({
@@ -63,9 +76,13 @@ $(document).ready(function () {
       dataType: "json",
     }).then(function (response) {
       for (let i = 0; i < 5; i++) {
-        $("#forecast").append(`    <div class="card" style="width: 14rem;">
+        $("#forecast")
+          .append(`    <div class="card mr-2 mb-2" style="width: 14rem;">
     <div class="card-body">
        <h5 class="card-title">${response.list[8 * i].dt_txt}</h5>
+       <img src="http://openweathermap.org/img/wn/${
+         response.list[8 * i].weather[0].icon
+       }.png" alt="WeatherIcon">
       <p class="card-text">Temp: ${response.list[8 * i].main.temp}°F</p>
       <p class="card-text">Humidity: ${response.list[8 * i].main.humidity}%</p>
     </div>
