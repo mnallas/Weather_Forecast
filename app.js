@@ -22,8 +22,21 @@ $(document).ready(function () {
       dataType: "json",
     }).then(function (response) {
       console.log(response);
-      displayInfo(0);
-      displayForecast();
+      displayInfo(0, userInput);
+      displayForecast(userInput);
+    });
+  });
+
+  $(document).on("click", "#city", function () {
+    var city = $(this).text();
+    $.ajax({
+      type: "GET",
+      url: `https://api.openweathermap.org/data/2.5/forecast?units=imperial&q=${city}&appid=${apiKey}`,
+      dataType: "json",
+    }).then(function (response) {
+      console.log(response);
+      displayInfo(0, city);
+      displayForecast(city);
     });
   });
 
@@ -34,14 +47,16 @@ $(document).ready(function () {
   function renderSearch(arr) {
     $("#list").empty();
     for (let i = 0; i < arr.length; i++) {
-      $("#list").prepend(`<li class="list-group-item">${arr[i]}</li>`);
+      $("#list").prepend(
+        `<li id="city" class="list-group-item">${arr[i]}</li>`
+      );
     }
   }
 
-  function displayInfo(num) {
+  function displayInfo(num, city) {
     $.ajax({
       type: "GET",
-      url: `https://api.openweathermap.org/data/2.5/forecast?units=imperial&q=${userInput}&appid=${apiKey}`,
+      url: `https://api.openweathermap.org/data/2.5/forecast?units=imperial&q=${city}&appid=${apiKey}`,
       dataType: "json",
     }).then(function (response) {
       $("#info").remove();
@@ -68,11 +83,11 @@ $(document).ready(function () {
     });
   }
 
-  function displayForecast() {
+  function displayForecast(city) {
     $("#forecast").empty();
     $.ajax({
       type: "GET",
-      url: `https://api.openweathermap.org/data/2.5/forecast?units=imperial&q=${userInput}&appid=${apiKey}`,
+      url: `https://api.openweathermap.org/data/2.5/forecast?units=imperial&q=${city}&appid=${apiKey}`,
       dataType: "json",
     }).then(function (response) {
       for (let i = 0; i < 5; i++) {
